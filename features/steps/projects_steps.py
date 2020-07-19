@@ -1,11 +1,12 @@
 import json
 import uuid
 from http import HTTPStatus
+from os import getenv
 
 import requests
 from behave import *
 
-TOKEN = "Please insert your token"
+api_token = getenv("apitoken")
 
 
 @step("I create a project with name {name}")
@@ -19,7 +20,7 @@ def create_project(context, name):
         headers={
             "Content-Type": "application/json",
             "X-Request-Id": str(uuid.uuid4()),
-            "Authorization": f"Bearer {TOKEN}"
+            "Authorization": f"Bearer {api_token}"
         }).json()
     context.project_id = response["id"]
 
@@ -35,7 +36,7 @@ def update_project_name(context, name):
         headers={
             "Content-Type": "application/json",
             "X-Request-Id": str(uuid.uuid4()),
-            "Authorization": f"Bearer {TOKEN}"
+            "Authorization": f"Bearer {api_token}"
         })
 
 
@@ -43,7 +44,7 @@ def update_project_name(context, name):
 def get_project_details(context):
     response = requests.get(
         f"https://api.todoist.com/rest/v1/projects/{context.project_id}",
-        headers={"Authorization": f"Bearer {TOKEN}"}
+        headers={"Authorization": f"Bearer {api_token}"}
     ).json()
     context.project_details = response
 
@@ -58,7 +59,7 @@ def verify_project_name(context):
 def delete_project(context):
     requests.delete(
         f"https://api.todoist.com/rest/v1/projects/{context.project_id}",
-        headers={"Authorization": f"Bearer {TOKEN}"}
+        headers={"Authorization": f"Bearer {api_token}"}
     )
 
 
@@ -66,6 +67,6 @@ def delete_project(context):
 def verify_project_is_deleted(context):
     response = requests.get(
         f"https://api.todoist.com/rest/v1/projects/{context.project_id}",
-        headers={"Authorization": f"Bearer {TOKEN}"}
+        headers={"Authorization": f"Bearer {api_token}"}
     )
     assert response.status_code == HTTPStatus.NOT_FOUND, f"Expected status is 404 but was {response.status_code}"
