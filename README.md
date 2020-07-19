@@ -1,4 +1,4 @@
-#API TESTS WITH PYTHON AND BEHAVE
+# API TESTS WITH PYTHON AND BEHAVE
 
 I tried to create simple api testing framework for https://developer.todoist.com/rest/v1/ using python requests package and BDD framework behave.
 In my opinion using BDD for API tests helps to make tests more readable and business logic more understandable.
